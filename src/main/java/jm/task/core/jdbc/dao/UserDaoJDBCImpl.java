@@ -1,24 +1,13 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    public static final String PASSWORD = "root";
-    public static final String USER_NAME = "root";
-    public static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
-    public static Connection connection;
 
-    static {
-        try {
-            connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    private static Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
 
@@ -47,17 +36,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        /*try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("INSERT INTO Users1 (name, lastName, age) values ("
-                    + name + ", " + lastName + ", " + (int) age + ")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-        try (PreparedStatement pstm = connection.prepareStatement("INSERT INTO Users1 (name, lastName, age) VALUES (?, ?, ?)")) {
-            pstm.setString(1, name);
-            pstm.setString(2, lastName);
-            pstm.setByte(3, age);
-            pstm.executeUpdate();
+        try (PreparedStatement sqlQueryWithVariebles = connection.prepareStatement("INSERT INTO Users1 (name, lastName, age) VALUES (?, ?, ?)")) {
+            sqlQueryWithVariebles.setString(1, name);
+            sqlQueryWithVariebles.setString(2, lastName);
+            sqlQueryWithVariebles.setByte(3, age);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,7 +55,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Users1");
             while (resultSet.next()) {
@@ -93,6 +74,5 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }
