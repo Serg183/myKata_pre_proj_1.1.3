@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Util {
-    // реализуйте настройку соеденения с БД
-    public static final String PASSWORD = "root";
-    public static final String USER_NAME = "root";
-    public static final String URL = "jdbc:mysql://localhost:3306/mysql";
-    public static Connection connection;
+
+    private static final String PASSWORD = "root";
+    private static final String USER_NAME = "root";
+    private static final String URL = "jdbc:mysql://localhost:3306/mysql";
+    private static Connection connection;
 
     public static Connection getConnection () {
         try {
